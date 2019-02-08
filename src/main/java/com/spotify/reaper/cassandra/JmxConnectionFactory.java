@@ -15,41 +15,35 @@ package com.spotify.reaper.cassandra;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-
 import com.google.common.collect.Lists;
 import com.spotify.reaper.ReaperException;
 import com.spotify.reaper.core.Cluster;
-
 import javax.annotation.Nullable;
 import java.util.Collection;
 
 public class JmxConnectionFactory {
 
-  public JmxProxy create(Optional<RepairStatusHandler> handler, String host)
-      throws ReaperException {
-    return JmxProxy.connect(handler, host);
-  }
-
-  public final JmxProxy create(String host) throws ReaperException {
-    return create(Optional.<RepairStatusHandler>absent(), host);
-  }
-
-  public final JmxProxy connectAny(Optional<RepairStatusHandler> handler, Collection<String> hosts)
-      throws ReaperException {
-    return create(handler, hosts.iterator().next());
-  }
-
-  public final JmxProxy connectAny(Cluster cluster)
-      throws ReaperException {
-    return connectAny(Optional.<RepairStatusHandler>absent(), cluster.getSeedHosts());
-  }
-
-  public final Collection<JmxProxy> connectAll(Collection<String> hosts)
-      throws ReaperException {
-    Collection<JmxProxy> connections = Lists.newArrayList();
-    for (String host : hosts) {
-      connections.add(create(host));
+    public JmxProxy create(Optional<RepairStatusHandler> handler, String host) throws ReaperException {
+        return JmxProxy.connect(handler, host);
     }
-    return connections;
-  }
+
+    public final JmxProxy create(String host) throws ReaperException {
+        return create(Optional.<RepairStatusHandler>absent(), host);
+    }
+
+    public final JmxProxy connectAny(Optional<RepairStatusHandler> handler, Collection<String> hosts) throws ReaperException {
+        return create(handler, hosts.iterator().next());
+    }
+
+    public final JmxProxy connectAny(Cluster cluster) throws ReaperException {
+        return connectAny(Optional.<RepairStatusHandler>absent(), cluster.getSeedHosts());
+    }
+
+    public final Collection<JmxProxy> connectAll(Collection<String> hosts) throws ReaperException {
+        Collection<JmxProxy> connections = Lists.newArrayList();
+        for (String host : hosts) {
+            connections.add(create(host));
+        }
+        return connections;
+    }
 }
